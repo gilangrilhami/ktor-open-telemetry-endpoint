@@ -11,6 +11,9 @@ RUN apt-get update \
         build-essential \
         git \
         sudo \
+        apt-transport-https \
+        tree \
+        wget \
     && rm -rf /var/lib/apt/lists/*
 
 
@@ -21,6 +24,14 @@ RUN curl -sLo gradle.zip "https://services.gradle.org/distributions/gradle-${GRA
     && unzip -d /opt/gradle gradle.zip \
     && rm gradle.zip \
     && ln -s /opt/gradle/gradle-${GRADLE_VERSION}/bin/gradle /usr/local/bin/gradle
+
+# Install Dart
+RUN awget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub \
+    | sudo gpg  --dearmor -o /usr/share/keyrings/dart.gpg \
+    && echo 'deb [signed-by=/usr/share/keyrings/dart.gpg arch=amd64] https://storage.googleapis.com/download.dartlang.org/linux/debian stable main' \
+    | sudo tee /etc/apt/sources.list.d/dart_stable.list \
+    && apt-get update \
+    && apt-get install -y dart
 
 # Create a non-root user (named 'vscode') to match what devcontainer.json expects
 ARG USERNAME=vscode
