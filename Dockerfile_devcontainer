@@ -1,0 +1,47 @@
+# Use Azul Zulu OpenJDK 17 as the base image
+FROM azul/zulu-openjdk:17
+
+# Install required packages, including sudo
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        curl \
+        unzip \
+        gnupg \
+        ca-certificates \
+        build-essential \
+        git \
+        sudo \
+    && rm -rf /var/lib/apt/lists/*
+
+
+# Install Gradle
+ARG GRADLE_VERSION=8.5
+RUN curl -sLo gradle.zip "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" \
+    && mkdir -p /opt/gradle \
+    && unzip -d /opt/gradle gradle.zip \
+    && rm gradle.zip \
+    && ln -s /opt/gradle/gradle-${GRADLE_VERSION}/bin/gradle /usr/local/bin/gradle
+
+# Create a non-root user (named 'vscode') to match what devcontainer.json expects
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=1000
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m -s /bin/bash $USERNAME \
+    # && apt-get update && apt-get install -y sudo \
+    && echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
+    && rm -rf /var/lib/apt/lists/*
+
+# Switch to the 'vscode' user
+USER $USERNAME
+
+# Set working directory
+WORKDIR /workspace
+
+# Fix permissions
+RUN chown -R ${USERNAME}:${USERNAME} /workspace
+
+# Copy project files
+COPY . .
+
+CMD ["/bin/bash"]
