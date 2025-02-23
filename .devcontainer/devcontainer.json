@@ -5,8 +5,8 @@
         // Adjust the context to your project's root folder if needed
         "context": "..",
         "args": {
-            "USER_UID": "${localEnv:UID}",
-            "USER_GID": "${localEnv:GID}",
+            "USER_UID": "1000",
+            "USER_GID": "1000",
             "USERNAME": "${localEnv:USER}"
         }
     },
@@ -34,13 +34,11 @@
     "remoteUser": "${localEnv:USER}",
     "forwardPorts": [8080],
     "workspaceFolder": "/workspace",
-    // "postStartCommand": "sudo chown -R $(id -u):$(id -g) /workspace",
+    "postStartCommand": "sudo chown -R $(id -u):$(id -g) /workspace",
     "features": {
         "ghcr.io/devcontainers/features/git:1": {}
     },
     "mounts": [
-        "source=${HOME},target=/workspace,type=bind,consistency=cached"
+        "source=.,target=/workspace,type=bind,consistency=cached"
     ]
-
-
 }
