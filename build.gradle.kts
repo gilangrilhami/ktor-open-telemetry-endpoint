@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.ktor)
     kotlin("jvm").version("1.9.0")
     kotlin("plugin.serialization").version("2.0.0")
+    id("com.google.protobuf").version("0.9.4")
 }
 
 group = "com.wolkk"
@@ -29,6 +30,8 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-protobuf:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("com.google.protobuf:protobuf-java:3.19.4")
+    implementation("com.google.protobuf:protobuf-java-util:3.19.4")
     testImplementation("io.ktor:ktor-server-test-host-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
