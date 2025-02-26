@@ -36,4 +36,20 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
 
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.19.4"
+    }
+    generatedFilesBaseDir = "$projectDir/src/generated"
+    // Add additional configuration if needed
+    // E.g., specifying proto files location:
+    sourceSets {
+        main {
+            proto {
+                srcDir("protos")
+            }
+        }
+    }
+}
+
 ktor { fatJar { archiveFileName.set("fat.jar") } }
