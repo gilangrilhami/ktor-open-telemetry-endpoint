@@ -6,7 +6,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.utils.io.readRemaining
 import kotlinx.io.readByteArray
-import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest
+import io.opentelemetry.proto.trace.v1.TracesData
 import com.google.protobuf.util.JsonFormat
 
 fun Application.configureRouting() {
@@ -14,7 +14,7 @@ fun Application.configureRouting() {
         get("/") { call.respondText("Hello, world!") }
         post("/v1/traces") {
             val rawBytes: ByteArray = call.receiveChannel().readRemaining().readByteArray()
-            val exportRequest = ExportTraceServiceRequest.parseFrom(rawBytes)
+            val exportRequest = TracesData.parseFrom(rawBytes)
             // print type of exportRequest
             println("Type of exportRequest: ${exportRequest::class.java}")
 
