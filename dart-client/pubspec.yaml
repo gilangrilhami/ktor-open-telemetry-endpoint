@@ -9,6 +9,7 @@ environment:
 # Add regular dependencies here.
 dependencies:
   # path: ^1.8.0
+  opentelemetry: ^0.18.8
 
 dev_dependencies:
   lints: ^5.0.0
